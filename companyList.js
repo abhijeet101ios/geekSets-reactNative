@@ -5,7 +5,7 @@
  */
 
  import React, { Component} from 'react';
- import { ListView, TouchableHighlight, TouchableOpacity, Image, Alert, Button} from 'react-native';
+ import { ListView, TouchableHighlight, TouchableOpacity, Image, Button} from 'react-native';
  import * as firebase from 'firebase';
  import {
    AppRegistry,
@@ -22,6 +22,8 @@
  };
  const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+var companyData;
+
  class CompanyCell extends Component {
 
    constructor(props) {
@@ -29,9 +31,14 @@
    }
    _pressRow (rowData) {
 var selectedCompany = rowData;
-Actions.companyView(selectedCompany)
+
+var compnayInfo = this.props.setInfo;
+
+Actions.companyView(compnayInfo)
      }
-   render () {
+
+render () {
+
      return (
        <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
 <Button onPress={()=> this._pressRow(this.props.text)}
@@ -55,6 +62,9 @@ style = {{backgroundColor:'white', color:'#00686D',height:60}}>
    dbSnapShot:[],
  };
  }
+ static getCurrentFirebaseRef() {
+   return firebaseApp;
+ }
 
  componentDidMount() {
      this.listenForItems(this.itemsRef);
@@ -63,34 +73,43 @@ style = {{backgroundColor:'white', color:'#00686D',height:60}}>
  listenForItems(itemsRef) {
      itemsRef.on('value', (snap) => {
        var items = [];
+       var values = [];
+
+        var localSnap = snap.ref;
        snap.forEach((child) => {
  items.push(child.key);
-       });
+
+var childRef = child.val();
+
+var companyName = child.key;
+
+ values.push({'name':companyName,'set':childRef});
+        });
+        companyData = values;
        this.setState({
          dataSource: this.state.dataSource.cloneWithRows(items),
-         dbSnapShot:snap
        });
      });
    }
 
    _renderPush(data) {
 
-     Alert.alert(
-  'Alert Title',
-  'My Alert Msg',
-  [
-    {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-    {text: 'OK', onPress: () => console.log('OK Pressed')},
-  ]
-)
-    //  this.props.navigator.push({
-    //        id: 'companyView',
-    //        passProps: {
-    //       }
-    //        });
    }
    _renderRow (rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
+
+var values = companyData;
+
+var companySetInfo;
+
+for (var i = 0; i < values.length; i++) {
+
+var valueSnapShot = values[i];
+
+if (  values[i].name == rowData) {
+  companySetInfo = values[i];
+}
+}
+
        return (
         // <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
       //  <Button onPress={()=> this._renderPush}
@@ -98,20 +117,13 @@ style = {{backgroundColor:'white', color:'#00686D',height:60}}>
       //  style = {{backgroundColor:'white', color:'#00686D',height:60}}>
       //  </Button>
       //    </View>
-           <CompanyCell text={rowData}></CompanyCell>
+      //console.log(this.state.dbSnapShot);
+           <CompanyCell text={rowData} setInfo={companySetInfo}></CompanyCell>
        );
      }
 
    _pressRow (rowData) {
-     Alert.alert(
-  'Alert Title',
-  'My Alert Msg',
-  [
-    {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-    {text: 'OK', onPress: () => console.log('OK Pressed')},
-  ]
-)
+
 var selectedCompany = rowData;
      }
 render () {
@@ -119,14 +131,7 @@ render () {
   return (
     <ListView
      dataSource={this.state.dataSource}
-// renderRow={
-//   <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
-// <Button onPress={this._samplePush}
-// title= {rowData}
-// style = {{backgroundColor:'white', color:'#00686D',height:60}}>
-// </Button>
-//   </View>
-// }
+
      renderRow={this._renderRow}
    />
      );

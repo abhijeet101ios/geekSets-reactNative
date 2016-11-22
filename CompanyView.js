@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import * as firebase from 'firebase';
-import {AppRegistry, ListView, View,} from 'react-native';
+import {AppRegistry, ListView, View, Text} from 'react-native';
+import {Actions} from 'react-native-router-flux';
 
-class CompanyCell extends Component {
+//import companyList from './companyList';
+
+// require('firebase/auth');
+// require('firebase/database');
+
+class SetCell extends Component {
   constructor(props) {
 super(props);
   }
@@ -18,40 +23,53 @@ super(props);
 export default class CompanyViewController extends Component {
 constructor(props) {
 super(props);
-this.state = {
-  id: 'companyView'
-}
+
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) =>(r1 !== r2)});
-//this.itemsRef = firebaseApp.database().ref('/sets/');
 
-var setList = this.props.dbSnapShot;
+//var firebaseApp = companyList.getCurrentFirebaseRef;
 
+var companyInfo = this.props.set;
+
+var companyName = this.props.name;
+
+ var setList = [];
+
+ var arr = Object.keys(companyInfo).map(function (key) { return companyInfo[key]; });
+
+for (var i = 0; i < arr.length; i++) {
+ var child =  arr[i];
+
+var temp = child;
+
+//my code //my rules
+
+var temp2;
+
+ setList.push(child.name);
+}
+
+// companyInfo.keys.forEach((child) => {
+// setList.push(child.key);
+//
+// //var childRef = child.ref;
+//
+// //values.push({childRef:child});
+//  });
+
+//this.itemsRef = firebaseApp.database().ref('/sets/'+companyName);
 
 this.state = {
-dataSource: ds.cloneWithRows([]),
+    id: 'companyView',
+dataSource: ds.cloneWithRows(setList)
 };
-}
-componentDidMount() {
-//  var companyName = this.props.route.passProps;
-  //this.listenForItems(this.itemsRef.ref('/'+companyName+'/'));
+
 }
 
-listenForItems(itemsRef) {
-    itemsRef.on('value', (snap) => {
-      var items = [];
-      snap.forEach((child) => {
-items.push(child.key);
-      });
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(items)
-      });
-    });
-  }
   render() {
     return (
  <ListView
  dataSource = {this.state.dataSource}
- renderRow = {(rowData) => <CompanyCell text={rowData}/>}
+ renderRow = {(rowData) => <SetCell text={rowData}/>}
   //renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
     />
     );
