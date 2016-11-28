@@ -67,6 +67,7 @@ style = {{backgroundColor:'white', color:'#00686D',height:60}}>
  }
 
  componentDidMount() {
+   firebaseApp.persistenceEnabled = true;
      this.listenForItems(this.itemsRef);
    }
 

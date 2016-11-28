@@ -10,7 +10,10 @@
     "firebase": "^3.6.0",
     "react": "15.3.2",
     "react-native": "0.37.0",
-    "react-native-router-flux": "^3.37.0"
+    "react-native-browser": "^0.6.2",
+    "react-native-router-flux": "^3.37.0",
+    "react-native-simple-onboarding": "^0.1.1",
+    "react-native-webbrowser": "0.0.6"
   },
   "jest": {
     "preset": "jest-react-native"

@@ -1,20 +1,35 @@
 import React, {Component} from 'react';
-import {AppRegistry, ListView, View, Text} from 'react-native';
+import {AppRegistry, ListView, View, Text, Button} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
 //import companyList from './companyList';
 
 // require('firebase/auth');
 // require('firebase/database');
+var urlList;
+
+var setList = [];
 
 class SetCell extends Component {
   constructor(props) {
 super(props);
   }
+  _pressRow (rowData) {
+var selectedCompany = rowData;
+
+var compnayInfo = this.props.setInfo;
+
+var url = this.props.url;
+
+Actions.browserView(url)
+    }
   render () {
     return (
       <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
-      <Text style = {{backgroundColor:'white', color:'#00686D',height:60}}> {this.props.text}</Text>
+      <Button onPress={()=> this._pressRow(this.props.text)}
+      title= {this.props.text}
+      style = {{height:60}}>
+      </Button>
       </View>
     );
   }
@@ -32,9 +47,9 @@ var companyInfo = this.props.set;
 
 var companyName = this.props.name;
 
- var setList = [];
-
  var arr = Object.keys(companyInfo).map(function (key) { return companyInfo[key]; });
+
+urlList = [];
 
 for (var i = 0; i < arr.length; i++) {
  var child =  arr[i];
@@ -46,6 +61,7 @@ var temp = child;
 var temp2;
 
  setList.push(child.name);
+ urlList.push(child.url);
 }
 
 // companyInfo.keys.forEach((child) => {
@@ -62,14 +78,27 @@ this.state = {
     id: 'companyView',
 dataSource: ds.cloneWithRows(setList)
 };
+}
+_renderRow (rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
 
+  var url;
+
+  // for (var i = 0; i < setList.length; i++) {
+  // if (rowData == setList[i].name) {
+  //   url = setList[i].url;
+  // }
+  // }
+url = urlList[rowID];
+
+return (<SetCell text={rowData} url={url}/>);
 }
 
-  render() {
+render() {
+
     return (
  <ListView
  dataSource = {this.state.dataSource}
- renderRow = {(rowData) => <SetCell text={rowData}/>}
+ renderRow = {this._renderRow}
   //renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
     />
     );
