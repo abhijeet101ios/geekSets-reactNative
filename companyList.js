@@ -39,14 +39,11 @@ Actions.companyView(compnayInfo)
 
 render () {
 
-     return (
-       <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
-<Button onPress={()=> this._pressRow(this.props.text)}
-title= {this.props.text}
-style = {{backgroundColor:'white', color:'#00686D',height:60}}>
-</Button>
-       </View>
-     );
+return (
+  <TouchableOpacity onPress={()=> this._pressRow(this.props.text)}>
+<Text style = {{paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
+    </TouchableOpacity>
+);
    }
  }
 
@@ -112,13 +109,6 @@ if (  values[i].name == rowData) {
 }
 
        return (
-        // <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
-      //  <Button onPress={()=> this._renderPush}
-      //  title= {rowData}
-      //  style = {{backgroundColor:'white', color:'#00686D',height:60}}>
-      //  </Button>
-      //    </View>
-      //console.log(this.state.dbSnapShot);
            <CompanyCell text={rowData} setInfo={companySetInfo}></CompanyCell>
        );
      }
@@ -131,6 +121,9 @@ render () {
 
   return (
     <ListView
+
+style = {{paddingTop:80}}
+
      dataSource={this.state.dataSource}
 
      renderRow={this._renderRow}

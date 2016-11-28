@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry, ListView, View, Text, Button} from 'react-native';
+import {AppRegistry, ListView, View, Text, Button, TouchableOpacity} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
 //import companyList from './companyList';
@@ -25,13 +25,17 @@ Actions.browserView(url)
     }
   render () {
     return (
-      <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
-      <Button onPress={()=> this._pressRow(this.props.text)}
-      title= {this.props.text}
-      style = {{height:60}}>
-      </Button>
-      </View>
+      <TouchableOpacity onPress={()=> this._pressRow(this.props.text)}>
+    <Text style = {{paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
+        </TouchableOpacity>
     );
+      // <View style={{flex:1, flexDirection: 'column',justifyContent: 'center',paddingTop:20}}>
+      // <Button onPress={()=> this._pressRow(this.props.text)}
+      // title= {this.props.text}
+      // style = {{height:60}}>
+      // </Button>
+      // </View>
+    //);
   }
 }
 
@@ -81,26 +85,16 @@ dataSource: ds.cloneWithRows(setList)
 }
 _renderRow (rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
 
-  var url;
-
-  // for (var i = 0; i < setList.length; i++) {
-  // if (rowData == setList[i].name) {
-  //   url = setList[i].url;
-  // }
-  // }
-url = urlList[rowID];
-
-return (<SetCell text={rowData} url={url}/>);
+return (<SetCell text={rowData} url={urlList[rowID]}/>);
 }
 
 render() {
 
     return (
  <ListView
+ style={{paddingTop:80}}
  dataSource = {this.state.dataSource}
- renderRow = {this._renderRow}
-  //renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-    />
+ renderRow = {this._renderRow}/>
     );
   }
 }
