@@ -93,6 +93,7 @@ render() {
     return (
  <ListView
  style={{paddingTop:80}}
+ enableEmptySections={true}
  dataSource = {this.state.dataSource}
  renderRow = {this._renderRow}/>
     );

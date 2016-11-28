@@ -5,7 +5,7 @@
  */
 
  import React, { Component} from 'react';
- import { ListView, TouchableHighlight, TouchableOpacity, Image, Button} from 'react-native';
+ import { ListView, TouchableHighlight, TouchableOpacity, Image, Button, ActivityIndicator} from 'react-native';
  import * as firebase from 'firebase';
  import {
    AppRegistry,
@@ -40,8 +40,8 @@ Actions.companyView(compnayInfo)
 render () {
 
 return (
-  <TouchableOpacity onPress={()=> this._pressRow(this.props.text)}>
-<Text style = {{paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
+  <TouchableOpacity style={{flex:1, flexDirection:'column',alignItems:'center',justifyContent:'center'}} onPress={()=> this._pressRow(this.props.text)}>
+<Text style = {{fontSize:16,fontWeight:'600', paddingTop:20, paddingBottom:20, paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
     </TouchableOpacity>
 );
    }
@@ -56,7 +56,8 @@ return (
    this.itemsRef = firebaseApp.database().ref('/sets/');
    this.state = {
    dataSource: ds.cloneWithRows([]),
-   dbSnapShot:[],
+   animating:true,
+   showProgress:true,
  };
  }
  static getCurrentFirebaseRef() {
@@ -86,12 +87,19 @@ var companyName = child.key;
         companyData = values;
        this.setState({
          dataSource: this.state.dataSource.cloneWithRows(items),
+         animating:true,
+         showProgress:false,
        });
      });
    }
 
    _renderPush(data) {
 
+   }
+   renderSeparator(sectionID, rowID) {
+       return (
+           <View style={styles.separator} key={sectionID+rowID}/>
+       );
    }
    _renderRow (rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
 
@@ -120,14 +128,20 @@ var selectedCompany = rowData;
 render () {
 
   return (
-    <ListView
+  <View style={{flex:1}}>
+  <ListView
 
-style = {{paddingTop:80}}
+style = {{flex:this.state.showProgress ? 0:1,paddingTop:80}}
 
-     dataSource={this.state.dataSource}
+   dataSource={this.state.dataSource}
+enableEmptySections={true}
+//renderSeparator={this.renderSeparator}
+   renderRow={this._renderRow}
+ />
+ <ActivityIndicator style={{flex:this.state.showProgress ? 1:0, opacity: this.state.showProgress ? 1.0 : 0.0}} color='#00C26D' animating={true} size="large"/>
 
-     renderRow={this._renderRow}
-   />
+
+  </View>
      );
 }
  }
