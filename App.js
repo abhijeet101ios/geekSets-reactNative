@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {AppRegistry, Text} from 'react-native';
-import {Router, Scene} from 'react-native-router-flux';
+import {Router, Scene, Actions} from 'react-native-router-flux';
 
 import Onboarding from './Onboarding';
 import Login from './Login';
@@ -14,8 +14,10 @@ return (
  <Scene key="root">
   <Scene key="onboarding"  component={Onboarding} hideNavBar={true} type="JUMP"/>
   <Scene key="login" component={Login} hideNavBar={true} type="JUMP" initial/>
-  <Scene key="companyList" component={CompanyList} title="Companies"/>
-  <Scene key="companyView" component={CompanyView} title="test"/>
+  <Scene key="companyList" component={CompanyList} title="Companies" rightTitle = "Login"
+          onRight = {() => { Actions.pop()}} initial/>
+  <Scene key="companyView" component={CompanyView} title="test" rightTitle = "Login"
+          onRight = {() => { Actions.pop()}}/>
   <Scene key='browserView' component={Browser} title=""/>
  </Scene>
 </Router>
