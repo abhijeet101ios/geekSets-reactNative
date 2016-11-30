@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry, ListView, View, Text, Button, TouchableOpacity} from 'react-native';
+import {AppRegistry, ListView, View, Image, Text, TouchableOpacity} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
 var urlList;
@@ -21,8 +21,9 @@ Actions.browserView(url)
     }
   render () {
     return (
-      <TouchableOpacity onPress={()=> this._pressRow(this.props.text)}>
-    <Text style = {{paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
+      <TouchableOpacity style={{flex:1}} onPress={()=> this._pressRow(this.props.text)}>
+<Image style={{flex:1}} source={require('./img/reminder_unselected.png')} />
+    <Text style = {{flex:1, paddingLeft:20, backgroundColor:'white', color:'#00C26D',height:60}}>{this.props.text} </Text>
         </TouchableOpacity>
     );
   }
